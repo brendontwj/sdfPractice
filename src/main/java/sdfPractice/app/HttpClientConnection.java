@@ -32,6 +32,7 @@ public class HttpClientConnection implements Runnable {
             BufferedReader br = new BufferedReader(isr);
             BufferedWriter bw = new BufferedWriter(osw);
 
+            // reading http request
             String input;
             input = br.readLine();
             System.out.println(input);
@@ -48,6 +49,7 @@ public class HttpClientConnection implements Runnable {
                 bw.write(splitInput[0] + " not supported\r\n");
                 bw.flush();
             } else {
+                // look thru folders sent in paths for requested content
                 boolean found = false;
                 for(String s : paths) {
                     File directory = new File(s);

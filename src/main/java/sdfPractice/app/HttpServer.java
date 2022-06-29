@@ -18,13 +18,16 @@ public class HttpServer {
     }
     
     public void start() throws IOException {
+        // starting server
         ServerSocket server = new ServerSocket(port);
 
+        // waiting for connection 
         while(true) {
             System.out.println("Waiting for connection");
             Socket sock = server.accept();
             System.out.println("Connected");
             File directory;
+            // checking if path is valid; if so, add to thread and submit
             for(String s : paths) {
                 directory = new File(s);
                 if(!directory.exists()) {
