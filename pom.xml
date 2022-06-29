@@ -51,6 +51,14 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
+          <configuration>
+            <finalName>sdfPractice</finalName>                   
+            <archive>
+                <manifest>
+                    <mainClass>sdfPractice.app.Main</mainClass>
+                </manifest>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
