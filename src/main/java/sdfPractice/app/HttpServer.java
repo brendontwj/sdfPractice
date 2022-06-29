@@ -19,10 +19,11 @@ public class HttpServer {
     
     public void start() throws IOException {
         ServerSocket server = new ServerSocket(port);
-        String docPath = null;
 
         while(true) {
+            System.out.println("Waiting for connection");
             Socket sock = server.accept();
+            System.out.println("Connected");
             File directory;
             for(String s : paths) {
                 directory = new File(s);
@@ -36,19 +37,12 @@ public class HttpServer {
                     System.out.println("Path is not readable");
                     System.exit(1);
                 } else {
-                    for(File webpage : directory.listFiles()) {
-                        if(webpage.getName().equals("index.html")) {
-                            docPath = webpage.getPath();
-                        }
-                    }
+                    ExecutorService executor =  Executors.newFixedThreadPool(3);
+                    HttpClientConnection thread = new HttpClientConnection(sock, paths);
+                    executor.submit(thread);
+                    System.out.println("Task submitted to threadpool.");
                 }
             }
-            ExecutorService executor =  Executors.newFixedThreadPool(3);
-            HttpClientConnection thread = new HttpClientConnection(sock, docPath);
-            executor.submit(thread);
-            System.out.println("Task submitted to threadpool.");
         }
-
-
     }
 }

@@ -6,10 +6,12 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        // initialize default settings if no arguments passed
         List<String> docPath = new LinkedList<String>();
         docPath.add("./static");
         String portNum = "8080";
 
+        // getting arguments if they are passed
         if(args.length > 0) {
             for(int i = 0; i < args.length; i++) {
                 if(args[i].contains("--port")) {
@@ -24,11 +26,12 @@ public class Main {
             }
         }
 
+        // start server
+        System.out.println("Starting server at port: " + portNum);
         HttpServer server = new HttpServer(portNum, (LinkedList<String>) docPath);
         try {
             server.start();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
