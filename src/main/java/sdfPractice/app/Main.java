@@ -1,5 +1,6 @@
 package sdfPractice.app;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,6 +24,12 @@ public class Main {
             }
         }
 
-        HttpServer server = new HttpServer(portNum, docPath);
+        HttpServer server = new HttpServer(portNum, (LinkedList<String>) docPath);
+        try {
+            server.start();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
