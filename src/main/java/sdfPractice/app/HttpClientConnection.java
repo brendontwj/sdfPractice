@@ -1,6 +1,5 @@
 package sdfPractice.app;
 
-import java.awt.image.RenderedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,7 +13,6 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
 
 public class HttpClientConnection implements Runnable {
     private Socket sock;
@@ -81,8 +79,7 @@ public class HttpClientConnection implements Runnable {
                     }
                     if(!found) {
                         System.out.println("Resource does not exist");
-                        bw.write("HTTP/1.1 404 Not Found\r\n");
-                        bw.write("\r\n");
+                        bw.write("HTTP/1.1 404 Not Found\r\n\r\n");
                         bw.write(splitInput[1] + " not found\r\n");
                         bw.flush();
                     }
