@@ -11,6 +11,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
@@ -54,20 +56,20 @@ public class HttpClientConnection implements Runnable {
                 // look thru folders sent in paths for requested content
                 boolean found = false;
                 for(String s : paths) {
-                    File directory = new File(s);
-                    for(File webpage : directory.listFiles()) {
-                        if(("/"+webpage.getName()).equals(splitInput[1]) && splitInput[1].contains(".png") ) {
+                    Path path = Paths.get(s+splitInput[1]);
+                    if (Files.exists(path)) {
+                        if(splitInput[1].contains(".png")) {
                             found = true;
                             System.out.println("PNG request");
-                            byte[] imageData = Files.readAllBytes(webpage.toPath());
+                            byte[] imageData = Files.readAllBytes(path);
                             bw.write("HTTP/1.1 200 OK\r\n");
                             bw.write("Content-Type: image/png\r\n\r\n");
                             sock.getOutputStream().write(imageData);
                             bw.flush();
-                        } else if (("/"+webpage.getName()).equals(splitInput[1])) {
+                        } else {
                             found = true;
                             System.out.println("Non-PNG request");
-                            InputStream fis = new FileInputStream(webpage);
+                            InputStream fis = new FileInputStream(path.toFile());
                             InputStreamReader fisr = new InputStreamReader(fis);
                             BufferedReader fbr = new BufferedReader(fisr);
                             String lines = fbr.lines().collect(Collectors.joining("\n"));
