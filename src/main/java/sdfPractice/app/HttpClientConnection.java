@@ -1,5 +1,6 @@
 package sdfPractice.app;
 
+import java.awt.image.RenderedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,6 +13,8 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
+
+import javax.imageio.ImageIO;
 
 public class HttpClientConnection implements Runnable {
     private Socket sock;
@@ -58,16 +61,10 @@ public class HttpClientConnection implements Runnable {
                         if(("/"+webpage.getName()).equals(splitInput[1]) && splitInput[1].contains(".png") ) {
                             found = true;
                             System.out.println("PNG request");
-                            InputStream fis = new FileInputStream(webpage);
-                            InputStreamReader fisr = new InputStreamReader(fis);
-                            BufferedReader fbr = new BufferedReader(fisr);
-                            String lines = fbr.lines().collect(Collectors.joining("\n"));
                             bw.write("HTTP/1.1 200 OK\r\n");
                             bw.write("Content-Type: image/png\r\n");
                             bw.write("\r\n");
-                            bw.write(lines);
                             bw.flush();
-                            fbr.close();
                         } else if (("/"+webpage.getName()).equals(splitInput[1])) {
                             found = true;
                             System.out.println("Non-PNG request");
