@@ -11,9 +11,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
-
 import javax.imageio.ImageIO;
 
 public class HttpClientConnection implements Runnable {
@@ -61,9 +61,10 @@ public class HttpClientConnection implements Runnable {
                         if(("/"+webpage.getName()).equals(splitInput[1]) && splitInput[1].contains(".png") ) {
                             found = true;
                             System.out.println("PNG request");
+                            byte[] imageData = Files.readAllBytes(webpage.toPath());
                             bw.write("HTTP/1.1 200 OK\r\n");
-                            bw.write("Content-Type: image/png\r\n");
-                            bw.write("\r\n");
+                            bw.write("Content-Type: image/png\r\n\r\n");
+                            sock.getOutputStream().write(imageData);
                             bw.flush();
                         } else if (("/"+webpage.getName()).equals(splitInput[1])) {
                             found = true;
@@ -72,8 +73,7 @@ public class HttpClientConnection implements Runnable {
                             InputStreamReader fisr = new InputStreamReader(fis);
                             BufferedReader fbr = new BufferedReader(fisr);
                             String lines = fbr.lines().collect(Collectors.joining("\n"));
-                            bw.write("HTTP/1.1 200 OK\r\n");
-                            bw.write("\r\n");
+                            bw.write("HTTP/1.1 200 OK\r\n\r\n");
                             bw.write(lines);
                             bw.flush();
                             fbr.close();
